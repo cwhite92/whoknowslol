@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <title>who knows lol</title>
+
+        <style>
+            body {
+                text-align: center;
+            }
+
+            .container {
+                width: 40%;
+                margin: 0 auto;
+            }
+
+            #the-thing {
+                display: inline-block;
+                font-size: 4em;
+                margin: 3em 0;
+            }
+
+            #dunno-quantifier {
+                width: 100%;
+            }
+
+            .not-much {
+                float: left;
+            }
+
+            .lots {
+                float: right;
+            }
+        </style>
+    </head>
+    <body>
+        <span id="the-thing">¯\_(ツ)_/¯</span>
+
+        <div class="container">
+            <p>how much do you dunno?</p>
+            <input type="range" name="dunno-quantifier" id="dunno-quantifier" value="0" step="1" min="0" max="30" oninput="updateThing(this);">
+            <div class="not-much">not a lot</div>
+            a moderate amount
+            <div class="lots">a whole lot</div>
+        </div>
+
+        <script>
+            var theThingElem = document.getElementById('the-thing');
+            var leftArm = '¯\\_/';
+            var rightArm = '\\_/¯';
+
+            function updateThing(elem) {
+                var theThingString = '¯\\_(ツ)_/¯';
+
+                for (var i = 0; i < elem.value; i++) {
+                    theThingString = leftArm + theThingString;
+                    theThingString = theThingString + rightArm;
+                }
+
+                theThingElem.innerHTML = theThingString;
+            }
+        </script>
+    </body>
+</html>
