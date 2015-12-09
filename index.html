@@ -39,13 +39,17 @@
 
         <div class="container">
             <p>how much do you dunno?</p>
-            <input type="range" name="dunno-quantifier" id="dunno-quantifier" value="0" step="1" min="0" max="30" oninput="updateThing(this);">
+            <input type="range" name="dunno-quantifier" title="dunno" id="dunno-quantifier" value="0" step="1" min="0" max="30" oninput="updateThing(this);">
             <div class="not-much">not a lot</div>
             a moderate amount
             <div class="lots">a whole lot</div>
         </div>
 
         <script>
+            String.prototype.repeat = function (num) {
+                return new Array(parseInt(num) + 1).join(this);
+            };
+
             var theThingElem = document.getElementById('the-thing');
             var leftArm = '¯\\_/';
             var rightArm = '\\_/¯';
@@ -53,12 +57,9 @@
             function updateThing(elem) {
                 var theThingString = '¯\\_(ツ)_/¯';
 
-                for (var i = 0; i < elem.value; i++) {
-                    theThingString = leftArm + theThingString;
-                    theThingString = theThingString + rightArm;
-                }
-
-                theThingElem.innerHTML = theThingString;
+                theThingElem.innerHTML = leftArm.repeat(elem.value)
+                                                .concat(theThingString)
+                                                .concat(rightArm.repeat(elem.value));
             }
         </script>
     </body>
