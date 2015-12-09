@@ -12,13 +12,34 @@
 
             .container {
                 width: 40%;
-                margin: 0 auto;
+                left: 50%;
+                transform: translate( -50%, 0%);
+                position: fixed;
+                bottom: 50px;
+                min-width: 300px;
             }
 
             #the-thing {
                 display: inline-block;
                 font-size: 4em;
-                margin: 3em 0;
+                position: fixed; /* or absolute */
+                top: 40%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 800px;
+            }
+
+            #the-thing *{
+                white-space: nowrap;
+                float:left;
+                width: 100%;
+            }
+            #the-thing :first-child {
+                text-align: right;
+            }
+
+            #the-thing :last-child {
+                text-align: left;
             }
 
             #dunno-quantifier {
@@ -39,26 +60,51 @@
 
         <div class="container">
             <p>how much do you dunno?</p>
-            <input type="range" name="dunno-quantifier" id="dunno-quantifier" value="0" step="1" min="0" max="30" oninput="updateThing(this);">
+            <input type="range" name="dunno-quantifier" title="dunno" id="dunno-quantifier" value="0" step="1" min="0" max="30" oninput="updateThing(this);">
             <div class="not-much">not a lot</div>
             a moderate amount
             <div class="lots">a whole lot</div>
         </div>
 
         <script>
+            String.prototype.repeat = function (num) {
+                return new Array(parseInt(num) + 1).join(this);
+            };
+
+            String.prototype.arm = function (num) {
+                return '<span>' + this.repeat(num) + '</span>';
+            };
+
+            String.prototype.wrap = function (num) {
+                return this.arm(9).repeat(num);
+            };
+
+            (function () {
+                Math.clamp = function (a, b, c) {
+                    return Math.max(b, Math.min(c, a));
+                }
+            })();
+
             var theThingElem = document.getElementById('the-thing');
             var leftArm = '¯\\_/';
             var rightArm = '\\_/¯';
 
             function updateThing(elem) {
-                var theThingString = '¯\\_(ツ)_/¯';
+                var theThingString = '¯\\_(ツ)_/¯',
+                        arms = elem.value,
+                        tips = Math.clamp(arms, 0, 3),
+                        wraps = ( arms - tips) / 9,
+                        parts = ( arms - tips) % 9;
 
-                for (var i = 0; i < elem.value; i++) {
-                    theThingString = leftArm + theThingString;
-                    theThingString = theThingString + rightArm;
-                }
-
-                theThingElem.innerHTML = theThingString;
+                theThingElem.innerHTML = leftArm.arm(parts)
+                                                .concat(leftArm.wrap(wraps))
+                                                .concat('<span>')
+                                                .concat(leftArm.repeat(tips))
+                                                .concat(theThingString)
+                                                .concat(rightArm.repeat(tips))
+                                                .concat('</span>')
+                                                .concat(rightArm.wrap(wraps))
+                                                .concat(rightArm.arm(parts));
             }
         </script>
     </body>
