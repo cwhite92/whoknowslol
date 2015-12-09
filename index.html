@@ -54,18 +54,21 @@
                 float: right;
             }
         </style>
+        <link rel="stylesheet" href="https://cdn.rawgit.com/enyo/opentip/master/css/opentip.css">
     </head>
     <body>
         <span id="the-thing">¯\_(ツ)_/¯</span>
 
         <div class="container">
             <p>how much do you dunno?</p>
-            <input type="range" name="dunno-quantifier" title="dunno" id="dunno-quantifier" value="0" step="1" min="0" max="30" oninput="updateThing(this);">
+            <input type="range" name="dunno-quantifier" title="dunno" id="dunno-quantifier" value="0" step="1" min="0" max="30" onmousedown="clearTooltips()" oninput="updateThing(this);">
             <div class="not-much">not a lot</div>
             a moderate amount
             <div class="lots">a whole lot</div>
-        </div>
 
+        </div>
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.3/clipboard.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/opentip/2.4.6/opentip-native.min.js"></script>
         <script>
             String.prototype.repeat = function (num) {
                 return new Array(parseInt(num) + 1).join(this);
@@ -106,6 +109,26 @@
                                                 .concat(rightArm.wrap(wraps))
                                                 .concat(rightArm.arm(parts));
             }
+
+            function clearTooltips()
+            {
+                tooltip.hide();
+            }
+            var tooltip = new Opentip("#dunno-quantifier", {showOn: null, style: 'dark', stem:'bottom', tipJoint:'bottom',
+                hideTrigger:'target', hideDelay:'1'});
+
+            new Clipboard('#dunno-quantifier', {
+                    target: function (trigger) {
+                        return theThingElem;
+                    }
+            }).on('success',function(e){
+                e.clearSelection();
+                tooltip.setContent('Copied!');
+                tooltip.show();
+            }).on('failure', function(e){
+                tooltip.setContent('Press ctrl/cmd + c to copy!');
+                tooltip.show();
+            });
         </script>
     </body>
 </html>
